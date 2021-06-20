@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class BacteriaAgent : MonoBehaviour
 {
-    private static int[] skillsTotal = new int[4];
 
     public GameObject bacteriumPrefab;
 
@@ -22,7 +21,6 @@ public class BacteriaAgent : MonoBehaviour
 
     private static int frame;
 
-    //public static List<Dictionary<string, string>> statisticBacteria = new List<Dictionary<string, string>>();
     private System.Guid id;
 
 
@@ -34,15 +32,6 @@ public class BacteriaAgent : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
 
         id = System.Guid.NewGuid();
-
-        //var dict = new Dictionary<string, string>();
-
-        //dict.Add("id", id.ToString());
-        //dict.Add("foodSkill", foodSkill.ToString());
-        //dict.Add("attackSkill", attackSkill.ToString());
-        //dict.Add("defSkill", defSkill.ToString());
-
-        //statisticBacteria.Add(dict);
 
         listBacteria.Add(this);
 
@@ -130,15 +119,7 @@ public class BacteriaAgent : MonoBehaviour
 
     public void Kill()
     {
-        for (int i = 0; i < Genome.skillCount; i++)
-        {
-            skillsTotal[genome.skills[i]]--;
-        }
         Destroy(gameObject);
-
-        //statisticBacteria.RemoveAt(statisticBacteria.FindIndex(
-        //        (e) => e["id"].Contains(id.ToString())
-        //    ));
 
         listBacteria.RemoveAt(listBacteria.FindIndex(
                 (e) => e.id == id
@@ -195,9 +176,9 @@ public class BacteriaAgent : MonoBehaviour
         genome = g;
         Color col = new Color(0.1f, 0.1f, 0.25f, 1f);
         float size = 0.75f;
+
         for (int i = 0; i < Genome.skillCount; i++)
         {
-            skillsTotal[g.skills[i]]++;
             if (g.skills[i] == 0)
             {
                 foodSkill++;
