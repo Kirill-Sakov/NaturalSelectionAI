@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BacteriaAgent : MonoBehaviour
@@ -21,10 +20,32 @@ public class BacteriaAgent : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    private static int frame;
+
+    //public static List<Dictionary<string, string>> statisticBacteria = new List<Dictionary<string, string>>();
+    private System.Guid id;
+
+
+    public static List<BacteriaAgent> listBacteria = new List<BacteriaAgent>();
+
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+
+        id = System.Guid.NewGuid();
+
+        //var dict = new Dictionary<string, string>();
+
+        //dict.Add("id", id.ToString());
+        //dict.Add("foodSkill", foodSkill.ToString());
+        //dict.Add("attackSkill", attackSkill.ToString());
+        //dict.Add("defSkill", defSkill.ToString());
+
+        //statisticBacteria.Add(dict);
+
+        listBacteria.Add(this);
+
     }
 
     // Update is called once per frame
@@ -104,6 +125,7 @@ public class BacteriaAgent : MonoBehaviour
         {
             Kill();
         }
+        
     }
 
     public void Kill()
@@ -113,6 +135,14 @@ public class BacteriaAgent : MonoBehaviour
             skillsTotal[genome.skills[i]]--;
         }
         Destroy(gameObject);
+
+        //statisticBacteria.RemoveAt(statisticBacteria.FindIndex(
+        //        (e) => e["id"].Contains(id.ToString())
+        //    ));
+
+        listBacteria.RemoveAt(listBacteria.FindIndex(
+                (e) => e.id == id
+            ));
     }
 
     private void Eat(float food)

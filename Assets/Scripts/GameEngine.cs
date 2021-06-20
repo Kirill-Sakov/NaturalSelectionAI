@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameEngine : MonoBehaviour
@@ -51,6 +52,32 @@ public class GameEngine : MonoBehaviour
             food.name = "food";
         }
         frame++;
+
+        if ((frame != 0) && (frame % 500 == 0))
+        {
+
+            int countGreenFoodSkill = (from i in BacteriaAgent.listBacteria
+                                  where
+                                    i.attackSkill == 0 // Травоядный тот, кто не атакует других
+                                  select i
+                                  ).Count();
+
+            int countAttackSkill = (from i in BacteriaAgent.listBacteria
+                                     where
+                                       i.attackSkill > i.defSkill // Хищник тот, у кого атака развита больше, чем защита
+                                    select i
+                                  ).Count();
+            
+            int countDefSkill = (from i in BacteriaAgent.listBacteria
+                                 where
+                                   i.defSkill >= i.attackSkill &&
+                                   i.defSkill != 0
+                                 select i
+                                  ).Count();
+
+            System.IO.File.AppendAllText(@"E:\Programming\source\repos\My\NaturalSelectionAI\stats\statistic.txt",
+                $"{frame}\t{BacteriaAgent.listBacteria.Count}\t{countGreenFoodSkill}\t{countAttackSkill}\t{countDefSkill}" + System.Environment.NewLine);
+        }
     }
 
     // Update is called once per frame
