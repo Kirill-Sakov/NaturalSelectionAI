@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BacteriaAgent : MonoBehaviour
@@ -7,6 +8,7 @@ public class BacteriaAgent : MonoBehaviour
     public GameObject bacteriumPrefab;
 
     // Характеристики агента
+    private int[] allSkills;
     public int foodSkill = 0;
     public int attackSkill = 0;
     public int defSkill = 0;
@@ -35,6 +37,12 @@ public class BacteriaAgent : MonoBehaviour
 
         listBacteria.Add(this);
 
+        // Меняется ли со временем?
+        allSkills = new int[]{
+            foodSkill,
+            attackSkill,
+            defSkill
+        };
     }
 
     // Update is called once per frame
@@ -110,6 +118,13 @@ public class BacteriaAgent : MonoBehaviour
         velocity *= 0.98f;
         rb.velocity = velocity;
         energy -= (Time.deltaTime * 0.5f);
+
+        allSkills = new int[]{
+            foodSkill,
+            attackSkill,
+            defSkill
+        };
+
         if (energy < 0f)
         {
             Kill();
@@ -137,7 +152,8 @@ public class BacteriaAgent : MonoBehaviour
             b.transform.position = transform.position;
             b.name = "bacterium";
             Genome g = new Genome(genome);
-            g.Mutate(0.5f);
+            g.MutateWeights(0.5f);
+            g.MutateSkills(allSkills);
             BacteriaAgent ai = b.GetComponent<BacteriaAgent>();
             ai.Init(g);
             ai.energy = energy;
@@ -179,22 +195,23 @@ public class BacteriaAgent : MonoBehaviour
 
         for (int i = 0; i < Genome.skillCount; i++)
         {
-            if (g.skills[i] == 0)
+            // Новый алгоритм распределения скиллов. 
+            if (i == 0 && g.skills[0] != 0)
             {
-                foodSkill++;
-                col.g += 0.2f;
+                foodSkill = g.skills[0];
+                col.g = 0.2f * g.skills[0];
             }
-            else if (g.skills[i] == 1)
+            else if (i == 1 && g.skills[1] != 0)
             {
-                attackSkill++;
-                col.r += 0.25f;
+                attackSkill = g.skills[1];
+                col.r = 0.25f * g.skills[1];
             }
-            else if (g.skills[i] == 2)
+            else if (i == 2 && g.skills[2] != 0)
             {
-                defSkill++;
-                col.b += 0.25f;
+                defSkill = g.skills[2];
+                col.b = 0.25f * g.skills[2];
             }
-            else if (g.skills[i] == 3)
+            else if (Random.Range(0, 100) < 2)
             {
                 size += 0.5f;
             }
