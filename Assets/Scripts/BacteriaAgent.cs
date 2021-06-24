@@ -21,8 +21,6 @@ public class BacteriaAgent : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private static int frame;
-
     private System.Guid id;
 
 
@@ -37,7 +35,6 @@ public class BacteriaAgent : MonoBehaviour
 
         listBacteria.Add(this);
 
-        // Меняется ли со временем?
         allSkills = new int[]{
             foodSkill,
             attackSkill,
@@ -144,7 +141,7 @@ public class BacteriaAgent : MonoBehaviour
     private void Eat(float food)
     {
         energy += food;
-        if (energy > 32)
+        if (energy > 16)
         {
             energy *= 0.5f;
             var bact = Resources.Load("bacteria", typeof(GameObject));
@@ -178,12 +175,26 @@ public class BacteriaAgent : MonoBehaviour
         {
             BacteriaAgent ai = col.gameObject.GetComponent<BacteriaAgent>();
             if (ai.age < 1f) return;
-            float damage = Mathf.Max(0f, attackSkill - ai.defSkill);
-            damage *= 4f;
-            damage = Mathf.Min(damage, ai.energy);
-            ai.energy -= damage * 1.25f;
-            Eat(damage);
-            if (ai.energy == 0f) ai.Kill();
+
+            float damage = 0;
+            if (attackSkill == ai.defSkill)
+            {
+                damage = 1;
+            }
+            else
+                damage = Mathf.Max(0f, attackSkill - ai.defSkill);
+
+            if (damage > 0)
+            {
+                Eat(ai.energy);
+                ai.energy = 0;
+            }
+
+            //damage *= 8f;
+            //damage = Mathf.Min(damage, ai.energy);
+            //ai.energy -= damage * 1.25f;
+            //Eat(damage);
+            // if (ai.energy == 0f) ai.Kill();
         }
     }
 
@@ -193,29 +204,27 @@ public class BacteriaAgent : MonoBehaviour
         Color col = new Color(0.1f, 0.1f, 0.25f, 1f);
         float size = 0.75f;
 
-        for (int i = 0; i < Genome.skillCount; i++)
+        // Новый алгоритм распределения скиллов. 
+        if (g.skills[0] != 0)
         {
-            // Новый алгоритм распределения скиллов. 
-            if (i == 0 && g.skills[0] != 0)
-            {
-                foodSkill = g.skills[0];
-                col.g = 0.2f * g.skills[0];
-            }
-            else if (i == 1 && g.skills[1] != 0)
-            {
-                attackSkill = g.skills[1];
-                col.r = 0.25f * g.skills[1];
-            }
-            else if (i == 2 && g.skills[2] != 0)
-            {
-                defSkill = g.skills[2];
-                col.b = 0.25f * g.skills[2];
-            }
-            else if (Random.Range(0, 100) < 2)
-            {
-                size += 0.5f;
-            }
+            foodSkill = g.skills[0];
+            col.g = 0.2f * g.skills[0];
         }
+        if (g.skills[1] != 0)
+        {
+            attackSkill = g.skills[1];
+            col.r = 0.25f * g.skills[1];
+        }
+        if (g.skills[2] != 0)
+        {
+            defSkill = g.skills[2];
+            col.b = 0.25f * g.skills[2];
+        }
+        if (Random.Range(0, 100) < 2)
+        {
+            size += 0.5f;
+        }
+
         transform.localScale = new Vector3(size, size, size);
         gameObject.GetComponent<SpriteRenderer>().color = col;
         nn = new NN(inputsCount, 8, 4);

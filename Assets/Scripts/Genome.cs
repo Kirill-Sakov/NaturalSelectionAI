@@ -17,7 +17,18 @@ public class Genome
         weights = new float[size];
         skills = new int[skillCount];
         ///
-        skills[0] = 7;
+        int counterS = 0;
+        while (counterS < 7)
+        {
+            int changedSkill = Random.Range(0, 3);
+            if (skills[changedSkill] < 4)
+            {
+                skills[changedSkill]++;
+                counterS++;
+            }
+            else
+                continue;
+        }
         ///
         for (int i = 0; i < size; i++)
         {
