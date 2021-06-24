@@ -51,17 +51,6 @@ public class Genome
             // С шансом 0.1, что некоторые веса сети изменятся
             if (Random.value < 0.1) weights[i] += Random.Range(-value, value);
         }
-
-        /// Старый алгоритм изменения скиллов
-        //for (int i = 0; i < skillCount; i++)
-        //{
-        //    if (Random.value < 0.05)
-        //    {
-        //        skills[i] = Random.Range(0, 4);
-        //    }
-        //}
-
-        
     }
 
     public void MutateSkills(int[] allSkills)

@@ -13,6 +13,8 @@ public class GameEngine : MonoBehaviour
 
     private int frame = 0;
 
+    private string SimulationName = "simulation-" + System.Guid.NewGuid().ToString().Substring(0, 5);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,7 +77,10 @@ public class GameEngine : MonoBehaviour
                                  select i
                                   ).Count();
 
-            System.IO.File.AppendAllText(@"E:\Programming\source\repos\My\NaturalSelectionAI\stats\statistic.txt",
+
+            string path = System.IO.Directory.GetCurrentDirectory() + $"\\stats\\statistic-{SimulationName}.txt";
+
+            System.IO.File.AppendAllText(path,
                 $"{frame}\t{BacteriaAgent.listBacteria.Count}\t{countGreenFoodSkill}\t{countAttackSkill}\t{countDefSkill}" + System.Environment.NewLine);
         }
     }
