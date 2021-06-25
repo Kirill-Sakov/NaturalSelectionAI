@@ -14,9 +14,7 @@ public class BacteriaAgent : MonoBehaviour
     public int defSkill = 0;
     public float energy = 10;
     public float age = 0;
-    public System.Guid id;
-
-    public string str_id;
+    public string id = string.Empty;
 
     private int inputsCount = 4;
     private Genome genome;
@@ -26,14 +24,14 @@ public class BacteriaAgent : MonoBehaviour
     
     public static List<BacteriaAgent> listBacteria = new List<BacteriaAgent>();
 
+    public string familyName = string.Empty;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
 
-        id = System.Guid.NewGuid();
-
-        str_id = id.ToString();
+        id = System.Guid.NewGuid().ToString();
 
         listBacteria.Add(this);
 
@@ -42,6 +40,9 @@ public class BacteriaAgent : MonoBehaviour
             attackSkill,
             defSkill
         };
+
+        if (familyName == string.Empty)
+            familyName = id.Substring(0, 4);
     }
 
     // Update is called once per frame
@@ -75,7 +76,7 @@ public class BacteriaAgent : MonoBehaviour
                 neighboursCount[0]++;
                 vectors[0] += colliders[i].gameObject.transform.position - transform.position;
             }
-            else if (colliders[i].gameObject.name == "bacterium")
+            else if (colliders[i].gameObject.name.Contains("bacterium"))
             {
                 BacteriaAgent ai = colliders[i].gameObject.GetComponent<BacteriaAgent>();
 
@@ -149,13 +150,14 @@ public class BacteriaAgent : MonoBehaviour
             var bact = Resources.Load("bacteria", typeof(GameObject));
             GameObject b = (GameObject)Object.Instantiate(bact, new Vector3(0, 0, 0), Quaternion.identity);
             b.transform.position = transform.position;
-            b.name = "bacterium";
+            b.name = "bacterium-" + familyName;
             Genome g = new Genome(genome);
             g.MutateWeights(0.5f);
             g.MutateSkills(allSkills);
             BacteriaAgent ai = b.GetComponent<BacteriaAgent>();
             ai.Init(g);
             ai.energy = energy;
+            ai.familyName = familyName; // Присваиваем род
         }
     }
 
@@ -173,7 +175,7 @@ public class BacteriaAgent : MonoBehaviour
     {
         if (age < 1f) return; // Если агент "младше" 1, он не может атаковать
         if (attackSkill == 0) return; // Если атака 0, так же не может атаковать
-        if (col.gameObject.name == "bacterium")
+        if (col.gameObject.name.Contains("bacterium"))
         {
             BacteriaAgent ai = col.gameObject.GetComponent<BacteriaAgent>();
             if (ai.age < 1f) return; 
