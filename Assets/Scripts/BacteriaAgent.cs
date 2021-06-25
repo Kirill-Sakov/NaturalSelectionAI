@@ -180,14 +180,14 @@ public class BacteriaAgent : MonoBehaviour
             BacteriaAgent ai = col.gameObject.GetComponent<BacteriaAgent>();
             if (ai.age < 1f) return; 
 
-            if (attackSkill == ai.attackSkill) // Если встретил себе подобного - ничего не делать
+            if (familyName.Equals(ai.familyName)) // Если встретил себе подобного - ничего не делать
                 return;
 
             // Рассчёт урона (разница между силой атакующего и защитой обороняющегося)
-            float damage = Mathf.Max(0f, attackSkill - ai.defSkill);
+            float damage = attackSkill - ai.defSkill;
 
             // Если атака оказалась больше
-            if (damage > 0)
+            if (damage >= 0)
             {
                 Eat(ai.energy); // Хищник забирает энергию жертвы себе
                 ai.energy = 0; // Энергия жертвы устанавливается в 0, т.е. смерть агента
