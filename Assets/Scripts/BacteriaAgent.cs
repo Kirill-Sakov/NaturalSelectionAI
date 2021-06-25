@@ -14,16 +14,16 @@ public class BacteriaAgent : MonoBehaviour
     public int defSkill = 0;
     public float energy = 10;
     public float age = 0;
+    public System.Guid id;
+
+    public string str_id;
 
     private int inputsCount = 4;
     private Genome genome;
     private NN nn;
 
     private Rigidbody2D rb;
-
-    private System.Guid id;
-
-
+    
     public static List<BacteriaAgent> listBacteria = new List<BacteriaAgent>();
 
     // Start is called before the first frame update
@@ -32,6 +32,8 @@ public class BacteriaAgent : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
 
         id = System.Guid.NewGuid();
+
+        str_id = id.ToString();
 
         listBacteria.Add(this);
 
@@ -169,32 +171,25 @@ public class BacteriaAgent : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (age < 1f) return;
-        if (attackSkill == 0) return;
+        if (age < 1f) return; // Если агент "младше" 1, он не может атаковать
+        if (attackSkill == 0) return; // Если атака 0, так же не может атаковать
         if (col.gameObject.name == "bacterium")
         {
             BacteriaAgent ai = col.gameObject.GetComponent<BacteriaAgent>();
-            if (ai.age < 1f) return;
+            if (ai.age < 1f) return; 
 
-            float damage = 0;
-            if (attackSkill == ai.defSkill)
-            {
-                damage = 1;
-            }
-            else
-                damage = Mathf.Max(0f, attackSkill - ai.defSkill);
+            if (attackSkill == ai.attackSkill) // Если встретил себе подобного - ничего не делать
+                return;
 
+            // Рассчёт урона (разница между силой атакующего и защитой обороняющегося)
+            float damage = Mathf.Max(0f, attackSkill - ai.defSkill);
+
+            // Если атака оказалась больше
             if (damage > 0)
             {
-                Eat(ai.energy);
-                ai.energy = 0;
+                Eat(ai.energy); // Хищник забирает энергию жертвы себе
+                ai.energy = 0; // Энергия жертвы устанавливается в 0, т.е. смерть агента
             }
-
-            //damage *= 8f;
-            //damage = Mathf.Min(damage, ai.energy);
-            //ai.energy -= damage * 1.25f;
-            //Eat(damage);
-            // if (ai.energy == 0f) ai.Kill();
         }
     }
 
