@@ -77,11 +77,15 @@ public class GameEngine : MonoBehaviour
                                  select i
                                   ).Count();
 
+            float averageAge = (from i in BacteriaAgent.listBacteria
+                                where i.age > 1
+                                select i.age).Average();
+
 
             string path = System.IO.Directory.GetCurrentDirectory() + $"\\stats\\statistic-{SimulationName}.txt";
 
             System.IO.File.AppendAllText(path,
-                $"{frame}\t{BacteriaAgent.listBacteria.Count}\t{countGreenFoodSkill}\t{countAttackSkill}\t{countDefSkill}" + System.Environment.NewLine);
+                $"{frame}\t{BacteriaAgent.listBacteria.Count}\t{countGreenFoodSkill}\t{countAttackSkill}\t{countDefSkill}\t{averageAge}" + System.Environment.NewLine);
         }
     }
 
