@@ -9,7 +9,7 @@ Document: [here](https://docs.google.com/document/d/1CnagabWTiOvTV-i7GdWdpSsiXP-
 
 ![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODVmOWZkZWRiNzI4ODVhYjIzNjdjYjE2NDAwOGU4NWQxMWZjMjM2MyZjdD1n/QQzRVgWJ7b8T1fUaOd/giphy.gif)
 
-Each agent has this neural network. About 10 simulations were run with data collection for a total duration of about 60 hours.
+About 10 simulations were run with data collection for a total duration of about 60 hours.
 
 The dynamics of the decline and growth of populations in the environment, and their influence on each other, is traced.
 
@@ -19,7 +19,7 @@ In this model, the algorithms have successfully adapted to environmental conditi
 
 ![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDg2MGNmMTNhZTNmZjg0NzQ1Y2FmZmM5N2I2MWUyYTVjYWQ0YWE2YiZjdD1n/HlMChJJqSpPJ3Ke8WU/giphy.gif)
 
-The lengths of 4 vectors directed from the agent to the largest accumulation of food, predatory agents, herbivorous agents and protected agents are fed to the network input.
+Each agent has this neural network. The lengths of 4 vectors directed from the agent to the largest accumulation of food, predatory agents, herbivorous agents and protected agents are fed to the network input.
 
 The output values of the network are converted into a 2-dimensional vector, which is then used to move the agent.
 
