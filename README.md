@@ -28,7 +28,7 @@ They pass their neural network weights on to their offspring with some probabili
 
 Thus, sampling and natural selection are carried out, where with each step of the simulation, only the most adapted agents to the environment survive.
 
-### data for 300 thousand simulation steps
+### data for 300 thousand simulation steps (approximately 4 hours)
 
 ![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODNkNTcyMjM5MDgzNWMxOWY3Mjk3M2RhY2I0MjAxODNmYWQ1MGJkZSZjdD1n/82N2YQtxL2Wgc2DAEd/giphy.gif)
 
